@@ -1,0 +1,354 @@
+# 长空日报 · 机器权威常量（schema_version: 2 · pipeline 2026-09-v1）
+# 文档解释规则；脚本必须读本文件。缺文件时脚本回退旧默认并 WARN。
+# 变更核心阈值时只改此处，并跑 audits/test_v1_final_freeze.py + run_all_tests.sh。
+
+schema_version: 2
+pipeline_version: "2026-09-v1.0"
+# 版本三分：新闻规则（本文件业务常量）vs release/runtime 语义分离
+# 诚实标签：无 repository_commit 可追溯 runtime_verification → 不得仅凭 ALL_PASS 写 RC/FINAL
+spec_version: "1.0"
+spec_status: "frozen"
+runtime_status: "not_verified"   # 1.0 SPEC FROZEN；标 RC 须另写 runtime_verification 块
+# release_status: 仅 FINAL 时写 final；当前不写
+# runtime_verification:  # 标 RC/FINAL 时必填，否则保持 not_verified
+#   repository_commit: "<git sha>"
+#   verified_at: "<ISO8601 Asia/Shanghai>"
+#   test_suite: "audits/run_all_tests.sh"
+#   result_ref: "audits/fixtures/golden/<file>.json"
+timezone: "Asia/Shanghai"
+# timezone_offset is DERIVED at runtime from IANA tz; do not treat as second authority
+
+desks:
+  中国:
+    max_items: 8
+    primary_visible: 5
+    candidate_target_min: 10
+    candidate_target_max: 20
+  国际:
+    max_items: 8
+    primary_visible: 5
+    candidate_target_min: 10
+    candidate_target_max: 20
+  财经:
+    max_items: 6
+    primary_visible: 4
+    candidate_target_min: 10
+    candidate_target_max: 20
+  前沿科技:
+    max_items: 8
+    primary_visible: 5
+    candidate_target_min: 10
+    candidate_target_max: 20
+
+# 无最低刊登条数（HARD）
+publish:
+  min_items_per_desk: 0
+  min_items_total: 0
+  trends_soft_min: 0
+  trends_soft_max: 4
+  upcoming_soft_max: 5
+
+freshness:
+  breaking_hours: 36
+  international_hours: 36
+  finance_hours: 36
+  china_policy_hours: 48
+  technology_hours: 48
+  social_hours: 48
+  max_age_days: 3
+  field_enforce_from: "2026-09-18"
+  caps_enforce_from: "2026-09-19"
+
+importance:
+  weights:
+    scope: 25
+    consequence: 25
+    magnitude: 20
+    duration: 15
+    novelty: 15
+  publish_threshold: 65
+  precheck_soft_warn_below: 50
+  hard_caps:
+    software_patch_minor: 60
+    partner_announcement_generic: 60
+    github_ordinary_pr_release: 55
+    meeting_no_outcome: 55
+    corporate_promo_generic: 50
+    offline_event_ordinary: 45
+
+evidence:
+  scale: "0-100"
+  publish_threshold: 60
+  critical_claims_aggregation: "min"
+  require_publication_critical_claim_ids: true
+  watchlist_when_importance_ge: 65
+  watchlist_when_evidence_lt: 60
+  vendor_claim_max_as_fact: false
+  reprint_counts_as_independent: false
+  # Machine-fixed bases (NOT ranges). Human docs may say "95–100 解释"; Machine base=95.
+  base_scores:
+    direct_strong: 95
+    highly_confirmed: 85
+    reliable_limited: 75
+    qualified_supported: 60
+    weak_signal: 40
+    unsupported: 0
+  modifiers:
+    independent_second_high_quality_source: 8
+    direct_original_record: 5
+    conflict_weak: -10
+    conflict_medium: -20
+    conflict_strong: -30
+  caps:
+    high_risk_single_source: 74
+    vendor_benchmark_objective_unverified: 59
+    vendor_attributed_claim: 90
+  floor: 0
+  ceiling: 100
+  # §4 IF chain — first match wins (strongest → weakest after hard exclusions)
+  classification_priority:
+    - direct_strong
+    - highly_confirmed
+    - reliable_limited
+    - qualified_supported
+    - weak_signal
+    - unsupported
+  # If class is direct_strong because original record qualifies it, do NOT also +direct_original
+  no_double_counting: true
+  # New publication: missing publication_critical_claim_ids → HARD BLOCK (no heuristic)
+  # Legacy archive read only: legacy_evidence_inferred=true
+
+risk:
+  source_level_d_forbidden: true
+  # C-level semantics live ONLY under source_level_c (discovery_only).
+  # source_level_c_alone_major removed from new Policy (legacy loader may ignore old key).
+  high_risk_number_require_evidence: true
+
+# C 级策略（1.0 冻结）：仅线索，不计入证据/独立源/公开源
+source_level_c:
+  discovery_only: true
+  count_as_evidence: false
+  count_as_independent_source: false
+  allowed_as_public_source: false
+
+dedup:
+  windows_days: [7, 14, 30]
+
+gates:
+  jishizhong_hard:
+    - truth
+    - freshness
+    - dedup
+    - evidence_sufficiency
+    - risk_eligibility
+  publishable_requires:
+    - truth_gate
+    - freshness_gate
+    - dedup_gate
+    - evidence_gate
+    - risk_gate
+    - importance_threshold
+
+coverage_keys:
+  中国:
+    - central_policy
+    - macro_economy
+    - financial_regulation
+    - judiciary
+    - major_social
+    - diplomacy
+    - disaster
+    - tech_industry
+  国际:
+    - united_states
+    - europe
+    - russia_ukraine
+    - middle_east
+    - asia
+    - intl_organizations
+    - global_disaster
+    - geopolitics_major
+  财经:
+    - central_banks
+    - equities
+    - bonds
+    - fx
+    - commodities
+    - macro_data
+    - large_corps
+    - financial_regulation
+  前沿科技:
+    - ai
+    - semiconductor
+    - cloud
+    - cybersecurity
+    - robotics
+    - aerospace
+    - biotech
+    - energy
+    - open_source
+
+source_roles:
+  - primary_actor
+  - regulator
+  - court_record
+  - data_provider
+  - independent_observer
+  - expert_analysis
+  - community_signal
+
+claim_types:
+  - fact
+  - self_reported
+  - estimate
+  - allegation
+  - forecast
+  - analysis
+
+claim_statuses:
+  - verified
+  - qualified
+  - conflicting
+  - unverified
+
+# Story / Attention Budget（无强制数量；宁缺毋滥）
+attention_budget:
+  tiers:
+    must_know:
+      display_tier: lead
+      description: "今天必须知道"
+    should_know:
+      display_tier: primary
+      description: "值得知道"
+    optional:
+      display_tier: more
+      description: "有兴趣再看"
+  no_minimum_counts: true
+  experiential_total_range: [12, 30]
+
+display_tiers:
+  - lead
+  - primary
+  - more
+
+# selection_reason / rejection_reason — 仅内部审计，sanitize 不进 HTML
+internal_audit_fields:
+  - selection_reason
+  - rejection_reason
+  - editor_notes
+  - importance_precheck
+  - verified_score
+  - evidence_confidence
+  - news_importance
+  - interest_relevance
+
+# Narrative Layer · 今日主线（trends）
+narrative:
+  max_threads: 4
+  min_threads: 0
+  min_supporting_story_ids: 2
+  min_supporting_claim_ids: 1
+  require_supporting_claim_ids: true
+  hide_when_insufficient: true
+  no_filler: true
+  causal_requires_claim: true
+
+time_rules:
+  # timezone inherited from top-level policy.timezone (Asia/Shanghai)
+  event_time_unknown:
+    allow: true
+    forbid_fake_midnight: true
+    freshness_fallback_fields:
+      - first_reported_at
+      - source_published_at
+      - material_update_at
+  date_only:
+    format: "YYYY-MM-DD"
+    forbid_fake_midnight: true
+  material_update_requires_substance: true
+
+# content_hash = SHA-256(canonical_json(sanitize_public_payload(report)))
+content_hash:
+  method: "hash(sanitize_public_payload)"
+  canonical_json:
+    sort_keys: true
+    ensure_ascii: false
+    utf8: true
+    unicode_normalize: NFC
+    null_policy: omit_none_in_objects
+    float_format: shortest_repr
+    array_order: preserve
+    time_format: as_emitted_by_sanitize
+  exclude_via_sanitize:
+    - editor_notes
+    - selection_reason
+    - rejection_reason
+    - generated_at
+    - report_hash
+    - content_hash
+    - repair_notes
+    - _meta
+    - importance_precheck
+    - verified_score
+    - evidence_confidence
+    - news_importance
+    - interest_relevance
+    - debug
+    - verification_request
+    - internal_score
+    - supporting_claim_ids
+  sort_keys: true
+
+# 正向质量指标目标（SOFT；不因超标 BLOCK 发布）
+quality_targets:
+  old_news_rate_max: 0.03
+  duplicate_rate_max: 0.0
+  low_importance_rate_max: 0.0
+  major_event_recall_min: null
+  top_story_recall_min: null
+  primary_source_ratio_min: 0.4
+  independent_sources_per_story_min: 1.0
+  # Supported Claim Ratio = (verified + qualified public) / (all public)
+  supported_claim_ratio_min: 0.80
+  # verified_claim_ratio_min: legacy-only key (loader readable); NOT authoritative
+  useful_story_ratio_min: 0.80
+  editorial_drift_max_subscore_delta: 8
+  # formal metric definitions: references/13a-quality-metric-definitions.md
+
+rule_layers:
+  HARD:
+    - truth_gate
+    - freshness_gate
+    - dedup_gate
+    - evidence_gate
+    - risk_gate
+    - publication_critical_claim_ids_presence
+    - coverage_map_presence
+    - coverage_map_schema_valid
+    - source_level_c_discovery_only
+    - source_level_d_forbidden
+    - public_payload_sanitization
+    - schema_validation
+    - content_hash_validation
+    - desk_max_items
+    - min_items_zero
+    - evidence_confidence_publish_threshold
+    - importance_publish_threshold
+    - freshness_max_age
+    - fact_lock
+    - claim_semantics_in_story
+    - no_internal_leak_to_html
+    - publish_gates_all_pass
+    - narrative_supporting_claim_ids
+  SOFT:
+    - importance_precheck_warn
+    - quality_metrics_warn
+    - editorial_drift_alert
+    - source_reliability_ranking
+    - coverage_gap_resolution
+  EDITORIAL:
+    - attention_budget_tiering
+    - cross_desk_competition
+    - reader_value
+    - narrative_thread_selection
+    - why_it_matters_optional

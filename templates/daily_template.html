@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3ecd9">
+  <title>长空日报 · {{ iso_date }}</title>
+  <meta name="description" content="长空日报：聚合中国、国际、财经与前沿科技的重要动态。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23f3ecd9'/%3E%3Cpath d='M13 15h38v35H18a5 5 0 0 1-5-5V15Zm6 0v30a5 5 0 0 1-5 5M25 23h18M25 30h18M25 37h8M37 37h6' fill='none' stroke='%231c1915' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='47' cy='17' r='6' fill='%239c2b1b'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --paper: #f3ecd9;
+      --paper-deep: #e9dfc8;
+      --ink: #1c1915;
+      --ink-2: #514b41;
+      --muted: #756d60;
+      --rule: #c9bca4;
+      --red: #9c2b1b;
+      --max: 73rem;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(255,255,255,.26), transparent 32rem),
+        var(--paper);
+      font-family: "Songti SC", "Noto Serif SC", "Source Han Serif SC", STSong, SimSun, Georgia, serif;
+      line-height: 1.72;
+    }
+    a { color: inherit; text-decoration: none; }
+    a:hover { color: var(--red); }
+    .wrap { width: min(var(--max), calc(100% - 2.5rem)); margin-inline: auto; }
+    .topline {
+      border-bottom: 1px solid var(--ink);
+      padding: .42rem 0;
+      color: var(--ink-2);
+      font-size: .76rem;
+      letter-spacing: .12em;
+    }
+    .topline .wrap { display: flex; justify-content: center; gap: 1rem; }
+    .masthead { padding: 1.25rem 0 .85rem; text-align: center; }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .85rem;
+    }
+    .brand-mark {
+      width: clamp(2.4rem, 5vw, 3.5rem);
+      aspect-ratio: 1;
+      flex: 0 0 auto;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(2.05rem, 6vw, 4rem);
+      line-height: 1;
+      letter-spacing: .24em;
+      text-indent: .24em;
+      font-weight: 800;
+    }
+    .strap {
+      margin: .65rem 0 0;
+      color: var(--ink-2);
+      font-size: .76rem;
+      letter-spacing: .23em;
+    }
+    .double-rule { border-top: 4px solid var(--ink); border-bottom: 1px solid var(--ink); height: 8px; margin-top: 1rem; }
+    .nav-shell {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(243,236,217,.96);
+      border-bottom: 1px solid var(--ink);
+      backdrop-filter: blur(8px);
+    }
+    .nav {
+      display: flex;
+      justify-content: center;
+      gap: clamp(.9rem, 4vw, 2.4rem);
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: .64rem 0 .58rem;
+      white-space: nowrap;
+      font-size: .84rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+    }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav a[aria-current="location"] { color: var(--red); }
+    main { padding: 1.2rem 0 3rem; }
+    .overview {
+      display: grid;
+      grid-template-columns: 8.5rem 1fr;
+      gap: 1.25rem;
+      align-items: baseline;
+      border-bottom: 2px solid var(--ink);
+      padding: .5rem 0 1rem;
+      margin-bottom: 1.4rem;
+    }
+    .eyebrow { color: var(--red); font-size: .82rem; font-weight: 700; letter-spacing: .22em; }
+    .overview p { margin: 0; font-size: clamp(1.08rem, 2.3vw, 1.55rem); font-weight: 700; line-height: 1.55; }
+    .section { scroll-margin-top: 4rem; margin-top: 2.25rem; }
+    .section-head {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: .85rem;
+      margin-bottom: .9rem;
+    }
+    .section-head::after { content: ""; height: 1px; background: var(--ink); grid-column: 2; }
+    .section-head h2 { margin: 0; font-size: 1.3rem; letter-spacing: .16em; }
+    .section-head small { grid-column: 3; color: var(--muted); font-size: .68rem; letter-spacing: .14em; }
+    .lead-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(17rem, .8fr); gap: 1.35rem; }
+    .lead-story { border-right: 1px solid var(--rule); padding-right: 1.35rem; }
+    .kicker { display: flex; flex-wrap: wrap; gap: .45rem .8rem; color: var(--muted); font-size: .72rem; letter-spacing: .08em; }
+    .score { color: var(--red); font-weight: 800; }
+    .lead-story h3 { margin: .45rem 0 .55rem; font-size: clamp(1.55rem, 3.4vw, 2.55rem); line-height: 1.2; letter-spacing: .02em; }
+    .lead-story > p { margin: 0; font-size: 1rem; color: var(--ink-2); }
+    .side-list { display: grid; align-content: start; }
+    .side-story { padding: 0 0 .9rem; margin-bottom: .9rem; border-bottom: 1px dotted var(--rule); }
+    .side-story:last-child { margin: 0; }
+    .side-story h3 { margin: .3rem 0; font-size: 1.08rem; line-height: 1.42; }
+    .side-story p { margin: 0; color: var(--ink-2); font-size: .88rem; }
+    .stories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--ink); }
+    .story { padding: 1rem 1.2rem 1.05rem 0; border-bottom: 1px dotted var(--rule); }
+    .story:nth-child(even) { border-left: 1px solid var(--rule); padding-left: 1.2rem; padding-right: 0; }
+    .story h3 { margin: .35rem 0 .42rem; font-size: 1.16rem; line-height: 1.38; }
+    .story > p { margin: 0; color: var(--ink-2); font-size: .92rem; }
+    details { margin-top: .65rem; border-top: 1px dotted var(--rule); padding-top: .48rem; }
+    summary { cursor: pointer; color: var(--red); font-size: .78rem; letter-spacing: .08em; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::before { content: "＋"; margin-right: .35rem; }
+    details[open] summary::before { content: "－"; }
+    .analysis { margin-top: .55rem; color: var(--ink-2); font-size: .84rem; }
+    .analysis p { margin: .25rem 0; }
+    .bands { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 1.1rem; }
+    .band { border-top: 3px solid var(--ink); padding-top: .7rem; scroll-margin-top: 4rem; }
+    .band h2 { margin: 0 0 .5rem; color: var(--red); font-size: 1rem; letter-spacing: .18em; }
+    .band ul { margin: 0; padding-left: 1.1rem; }
+    .band li { margin: .42rem 0; font-size: .88rem; }
+    .empty-desk { padding: 1.5rem 0; color: var(--muted); font-size: .88rem; font-style: italic; }
+    footer { border-top: 4px solid var(--ink); padding: 1rem 0 2rem; color: var(--muted); font-size: .76rem; letter-spacing: .08em; }
+    footer .wrap { display: flex; justify-content: space-between; gap: 1rem; }
+    @media (max-width: 860px) {
+      .lead-grid { grid-template-columns: 1fr; }
+      .lead-story { border-right: 0; border-bottom: 1px solid var(--ink); padding: 0 0 1.1rem; }
+      .side-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+      .bands { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 1.25rem, var(--max)); }
+      .masthead { padding-top: 1rem; }
+      .brand { gap: .45rem; }
+      .brand h1 { letter-spacing: .14em; text-indent: .14em; }
+      .strap { font-size: .68rem; letter-spacing: .12em; }
+      .nav { justify-content: flex-start; padding-inline: .25rem; }
+      .overview { grid-template-columns: 1fr; gap: .3rem; }
+      .section-head { grid-template-columns: auto 1fr; }
+      .section-head small { display: none; }
+      .lead-story h3 { font-size: 1.65rem; }
+      .side-list, .stories { grid-template-columns: 1fr; }
+      .story, .story:nth-child(even) { border-left: 0; padding: .9rem 0; }
+      .side-story p { display: none; }
+      footer .wrap { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topline">
+    <div class="wrap"><span>{{ date_str }}</span></div>
+  </div>
+
+  <header class="masthead wrap">
+    <div class="brand">
+      <svg class="brand-mark" aria-label="长空日报报纸图标" viewBox="0 0 64 64" role="img">
+        <rect x="4" y="4" width="56" height="56" rx="8" fill="#e9dfc8" stroke="#1c1915" stroke-width="2"/>
+        <path d="M17 16h31v32H21a4 4 0 0 1-4-4V16Zm5 0v28a4 4 0 0 1-4 4M29 23h13M29 29h13M29 35h6M38 35h4" fill="none" stroke="#1c1915" stroke-width="2.4" stroke-linecap="round"/>
+        <circle cx="48" cy="17" r="5" fill="#9c2b1b"/>
+      </svg>
+      <h1>长空日报</h1>
+    </div>
+    <p class="strap">中国 · 国际 · 财经 · 前沿科技　每日重要动态</p>
+    <div class="double-rule"></div>
+  </header>
+
+  <div class="nav-shell">
+    <nav class="nav wrap" aria-label="栏目导航">
+      <a href="#forecast" aria-current="location">前瞻</a><a href="#headlines">头条</a><a href="#china">中国</a><a href="#world">国际</a><a href="#finance">财经</a><a href="#tech">前沿科技</a><a href="#trends">今日主线</a><a href="#watch">提前关注</a><a href="#tomorrow">明日观察</a>
+    </nav>
+  </div>
+
+  <main class="wrap">
+    {% if forecast_summary %}
+    <section class="overview" id="forecast">
+      <div class="eyebrow">前瞻</div>
+      <p>{{ forecast_summary }}</p>
+    </section>
+    {% endif %}
+
+    {% if lead_story %}
+    <section class="section" id="headlines">
+      <header class="section-head"><h2>头条</h2><small>TOP STORIES</small></header>
+      <div class="lead-grid">
+        <article class="lead-story">
+          <div class="kicker">
+            <span class="score">重要度 {{ lead_story.importance }}</span>
+            <span>{{ lead_story.desk }}</span>
+            <time>{{ lead_story.display_time }}</time>
+            <span>{{ lead_story.confidence_label }}</span>
+          </div>
+          <h3>{{ lead_story.title }}</h3>
+          <p>{{ lead_story.summary }}</p>
+          {% if lead_story.why_it_matters or lead_story.what_to_watch %}
+          <details>
+            <summary>展开编辑分析</summary>
+            <div class="analysis">
+              {% if lead_story.why_it_matters %}<p><strong>为什么重要：</strong>{{ lead_story.why_it_matters }}</p>{% endif %}
+              {% if lead_story.what_to_watch %}<p><strong>后续观察：</strong>{{ lead_story.what_to_watch }}</p>{% endif %}
+            </div>
+          </details>
+          {% endif %}
+        </article>
+        <div class="side-list">
+          {% for story in side_stories %}
+          <article class="side-story">
+            <div class="kicker">
+              <span class="score">{{ story.importance }}</span>
+              <span>{{ story.desk }}</span>
+            </div>
+            <h3>{{ story.title }}</h3>
+            <p>{{ story.summary }}</p>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- 中国栏目 -->
+    <section class="section" id="china">
+      <header class="section-head"><h2>中国</h2><small>CHINA</small></header>
+      {% if desks['中国'] and desks['中国']|length > 0 %}
+      <div class="stories">
+        {% for story in desks['中国'] %}
+        <article class="story">
+          <div class="kicker">
+            <span class="score">{{ story.importance }}</span>
+            <time>{{ story.display_time }}</time>
+            <span>{{ story.confidence_label }}</span>
+          </div>
+          <h3>{{ story.title }}</h3>
+          <p>{{ story.summary }}</p>
+          {% if story.why_it_matters or story.what_to_watch %}
+          <details>
+            <summary>关键事实与后续</summary>
+            <div class="analysis">
+              {% if story.why_it_matters %}<p><strong>为什么重要：</strong>{{ story.why_it_matters }}</p>{% endif %}
+              {% if story.what_to_watch %}<p><strong>后续观察：</strong>{{ story.what_to_watch }}</p>{% endif %}
+            </div>
+          </details>
+          {% endif %}
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-desk">今日无达到刊登门槛事件（宁缺毋滥）</div>
+      {% endif %}
+    </section>
+
+    <!-- 国际栏目 -->
+    <section class="section" id="world">
+      <header class="section-head"><h2>国际</h2><small>WORLD</small></header>
+      {% if desks['国际'] and desks['国际']|length > 0 %}
+      <div class="stories">
+        {% for story in desks['国际'] %}
+        <article class="story">
+          <div class="kicker">
+            <span class="score">{{ story.importance }}</span>
+            <time>{{ story.display_time }}</time>
+            <span>{{ story.confidence_label }}</span>
+          </div>
+          <h3>{{ story.title }}</h3>
+          <p>{{ story.summary }}</p>
+          {% if story.why_it_matters or story.what_to_watch %}
+          <details>
+            <summary>关键事实与后续</summary>
+            <div class="analysis">
+              {% if story.why_it_matters %}<p><strong>为什么重要：</strong>{{ story.why_it_matters }}</p>{% endif %}
+              {% if story.what_to_watch %}<p><strong>后续观察：</strong>{{ story.what_to_watch }}</p>{% endif %}
+            </div>
+          </details>
+          {% endif %}
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-desk">今日无达到刊登门槛事件（宁缺毋滥）</div>
+      {% endif %}
+    </section>
+
+    <!-- 财经栏目 -->
+    <section class="section" id="finance">
+      <header class="section-head"><h2>财经</h2><small>FINANCE</small></header>
+      {% if desks['财经'] and desks['财经']|length > 0 %}
+      <div class="stories">
+        {% for story in desks['财经'] %}
+        <article class="story">
+          <div class="kicker">
+            <span class="score">{{ story.importance }}</span>
+            <time>{{ story.display_time }}</time>
+            <span>{{ story.confidence_label }}</span>
+          </div>
+          <h3>{{ story.title }}</h3>
+          <p>{{ story.summary }}</p>
+          {% if story.why_it_matters or story.what_to_watch %}
+          <details>
+            <summary>关键事实与后续</summary>
+            <div class="analysis">
+              {% if story.why_it_matters %}<p><strong>为什么重要：</strong>{{ story.why_it_matters }}</p>{% endif %}
+              {% if story.what_to_watch %}<p><strong>后续观察：</strong>{{ story.what_to_watch }}</p>{% endif %}
+            </div>
+          </details>
+          {% endif %}
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-desk">今日无达到刊登门槛事件（宁缺毋滥）</div>
+      {% endif %}
+    </section>
+
+    <!-- 前沿科技栏目 -->
+    <section class="section" id="tech">
+      <header class="section-head"><h2>前沿科技</h2><small>FRONTIER TECH</small></header>
+      {% if desks['前沿科技'] and desks['前沿科技']|length > 0 %}
+      <div class="stories">
+        {% for story in desks['前沿科技'] %}
+        <article class="story">
+          <div class="kicker">
+            <span class="score">{{ story.importance }}</span>
+            <time>{{ story.display_time }}</time>
+            <span>{{ story.confidence_label }}</span>
+          </div>
+          <h3>{{ story.title }}</h3>
+          <p>{{ story.summary }}</p>
+          {% if story.why_it_matters or story.what_to_watch %}
+          <details>
+            <summary>关键事实与后续</summary>
+            <div class="analysis">
+              {% if story.why_it_matters %}<p><strong>为什么重要：</strong>{{ story.why_it_matters }}</p>{% endif %}
+              {% if story.what_to_watch %}<p><strong>后续观察：</strong>{{ story.what_to_watch }}</p>{% endif %}
+            </div>
+          </details>
+          {% endif %}
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-desk">今日无达到刊登门槛事件（宁缺毋滥）</div>
+      {% endif %}
+    </section>
+
+    <!-- 趋势与观察 -->
+    <section class="section" aria-label="趋势与观察">
+      <div class="bands">
+        <article class="band" id="trends">
+          <h2>今日主线</h2>
+          {% if trends and trends|length > 0 %}
+          <ul>
+            {% for item in trends %}<li>{{ item }}</li>{% endfor %}
+          </ul>
+          {% else %}
+          <div class="empty-desk">暂无主线（不足不凑数）</div>
+          {% endif %}
+        </article>
+        <article class="band" id="watch">
+          <h2>提前关注</h2>
+          {% if watchlist and watchlist|length > 0 %}
+          <ul>
+            {% for item in watchlist %}<li>{{ item }}</li>{% endfor %}
+          </ul>
+          {% else %}
+          <div class="empty-desk">暂无提示</div>
+          {% endif %}
+        </article>
+        <article class="band" id="tomorrow">
+          <h2>明日观察</h2>
+          {% if tomorrow and tomorrow|length > 0 %}
+          <ul>
+            {% for item in tomorrow %}<li>{{ item }}</li>{% endfor %}
+          </ul>
+          {% else %}
+          <div class="empty-desk">暂无重点</div>
+          {% endif %}
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>长空日报 · 中国 / 国际 / 财经 / 前沿科技</span>
+      <span>今日 · 旧档 · RSS · Content Hash: {{ content_hash }}</span>
+    </div>
+  </footer>
+
+  <script>
+    const navLinks = Array.from(document.querySelectorAll('.nav a[href^="#"]'));
+
+    function setActiveNav(link) {
+      navLinks.forEach((item) => item.removeAttribute('aria-current'));
+      link.setAttribute('aria-current', 'location');
+      link.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    navLinks.forEach((link) => {
+      link.addEventListener('click', () => setActiveNav(link));
+    });
+
+    window.addEventListener('hashchange', () => {
+      const active = navLinks.find((link) => link.hash === window.location.hash);
+      if (active) setActiveNav(active);
+    });
+
+    if (window.location.hash) {
+      const active = navLinks.find((link) => link.hash === window.location.hash);
+      if (active) setActiveNav(active);
+    }
+  </script>
+</body>
+</html>

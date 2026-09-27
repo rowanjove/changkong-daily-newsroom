@@ -1,0 +1,185 @@
+{
+  "forecast_summary": "OpenAI 拟于 11 月终止向 Cursor 供应模型；Qwen 开放新一代 Flash 模型权重；全国人大常委会完成多项重要议程。",
+  "candidates": [
+    {
+      "event_id": "tech_openai_cursor_supply_20260828",
+      "desk": "前沿科技",
+      "title": "OpenAI 拟于 11 月 12 日终止向被 SpaceX 收购后的 Cursor 供应模型",
+      "summary": "OpenAI 表示已依据控制权变更条款通知 Cursor，拟停止现有及未来模型供应。对大量以 Cursor 为默认开发环境的用户而言，这是一条明确的迁移时间线。",
+      "event_time": "2026-08-28T14:30:00",
+      "source_level": "S",
+      "news_importance": 96,
+      "why_it_matters": "模型供应链与开发工具平台的分裂正在成为新的行业变量。",
+      "what_to_watch": "Cursor 的替代模型路线，以及 OpenAI 为现有用户提供的迁移支持。",
+      "verified_claims": [
+        {
+          "claim_id": "c1",
+          "claim_type": "official_statement",
+          "source_role": "primary_actor",
+          "independent_verified": true,
+          "confidence": 95,
+          "content": "OpenAI 已向 Cursor 发送终止合作正式通知"
+        },
+        {
+          "claim_id": "c2",
+          "claim_type": "contract_clause",
+          "source_role": "document",
+          "independent_verified": true,
+          "confidence": 92,
+          "content": "依据协议中控制权变更相关条款执行"
+        }
+      ],
+      "publication_critical_claim_ids": ["c1", "c2"]
+    },
+    {
+      "event_id": "china_npc_defense_mobilization_20260828",
+      "desk": "中国",
+      "title": "全国人大常委会通过新修订国防动员法",
+      "summary": "修订后的法律将于 2026 年 10 月 1 日起施行，进一步明确相关组织、资源与实施机制。",
+      "event_time": "2026-08-28T16:00:00",
+      "source_level": "S",
+      "news_importance": 90,
+      "why_it_matters": "明确国防动员管理体制与资源调配法律依据。",
+      "what_to_watch": "配套规章、地方执行细则与实际动员体系建设进展。",
+      "verified_claims": [
+        {
+          "claim_id": "c3",
+          "claim_type": "legislation",
+          "source_role": "official_gazette",
+          "independent_verified": true,
+          "confidence": 98,
+          "content": "全国人大常委会表决通过新修订国防动员法，10月1日起施行"
+        }
+      ],
+      "publication_critical_claim_ids": ["c3"]
+    },
+    {
+      "event_id": "finance_property_policy_mortgage_40y_20260828",
+      "desk": "财经",
+      "title": "三部门完善商品房销售制度，房贷最长期限延至 40 年",
+      "summary": "预售门槛、资金监管、现房销售与主办银行制度同步调整，将深刻影响房企现金流和购房者月供结构。",
+      "event_time": "2026-08-28T11:00:00",
+      "source_level": "S",
+      "news_importance": 85,
+      "why_it_matters": "房贷年限拉长有助于降低刚需月供压力，优化中长期信贷结构。",
+      "what_to_watch": "各商业银行后续执行利率细则与一线城市落地节奏。",
+      "verified_claims": [
+        {
+          "claim_id": "c4",
+          "claim_type": "regulatory_policy",
+          "source_role": "ministry_release",
+          "independent_verified": true,
+          "confidence": 95,
+          "content": "三部门联合发文允许房贷期限按特定条件延至最长40年"
+        }
+      ],
+      "publication_critical_claim_ids": ["c4"]
+    },
+    {
+      "event_id": "world_hormuz_strait_talks_20260828",
+      "desk": "国际",
+      "title": "卡塔尔斡旋霍尔木兹复航，各方说法仍未收敛",
+      "summary": "美方称相关清雷工作取得阶段进展，地区有关方面否认全面复航，正式通航安排仍待多方确认。",
+      "event_time": "2026-08-28T18:20:00",
+      "source_level": "A",
+      "news_importance": 88,
+      "why_it_matters": "海峡航道安全直接关联全球能源运输成本与海运保费定价。",
+      "what_to_watch": "观察实际商船通行流量与国际航运公会正式通告。",
+      "verified_claims": [
+        {
+          "claim_id": "c5",
+          "claim_type": "diplomatic_statement",
+          "source_role": "mediator",
+          "independent_verified": true,
+          "confidence": 85,
+          "content": "斡旋谈判持续推进但尚未达成最终具约束力协议"
+        }
+      ],
+      "publication_critical_claim_ids": ["c5"]
+    },
+    {
+      "event_id": "tech_qwen_flash_weights_20260828",
+      "desk": "前沿科技",
+      "title": "Qwen3.8-Flash-Next 开放权重，预览新一代架构",
+      "summary": "低激活参数、多模态与百万上下文共同构成这一轮开源投放的重点，大幅降低本地部署显存门槛。",
+      "event_time": "2026-08-28T10:00:00",
+      "source_level": "A",
+      "news_importance": 92,
+      "why_it_matters": "轻量高效模型在端侧与 Agentic Workflow 中的可用性跃升。",
+      "what_to_watch": "社区量化方案更新与基准评测复现。",
+      "verified_claims": [
+        {
+          "claim_id": "c6",
+          "claim_type": "open_source_release",
+          "source_role": "repo_commit",
+          "independent_verified": true,
+          "confidence": 90,
+          "content": "模型权重与配套推理代码正式上线开源社区"
+        }
+      ],
+      "publication_critical_claim_ids": ["c6"]
+    },
+    {
+      "event_id": "tech_vendor_fluff_unverified_benchmark",
+      "desk": "前沿科技",
+      "title": "某创业团队宣称自研小模型零样本碾压所有主流前沿闭源旗舰",
+      "summary": "根据该团队自身发布的公众号文章，其3B参数自研架构在自制测试集上全面超越业内顶尖大模型。",
+      "event_time": "2026-08-28T09:00:00",
+      "source_level": "C",
+      "news_importance": 70,
+      "is_pure_vendor_claim": true,
+      "verified_claims": [
+        {
+          "claim_id": "c7",
+          "claim_type": "vendor_claim",
+          "source_role": "primary_actor",
+          "independent_verified": false,
+          "confidence": 35,
+          "content": "自测跑分超行业标杆，未提供权重、API或第三方可复现代码"
+        }
+      ],
+      "publication_critical_claim_ids": ["c7"]
+    },
+    {
+      "event_id": "china_old_news_recycled_stale",
+      "desk": "中国",
+      "title": "重温：某地半年前出台的旧公积金便民指引",
+      "summary": "社交媒体博主重新整理了三个月前发布的旧政务指南并登上热搜榜单，内容无任何实质变化。",
+      "event_time": "2026-05-10T10:00:00",
+      "source_level": "B",
+      "news_importance": 68,
+      "has_material_update": false,
+      "verified_claims": [
+        {
+          "claim_id": "c8",
+          "claim_type": "historical_record",
+          "source_role": "secondary_summary",
+          "independent_verified": true,
+          "confidence": 80,
+          "content": "系旧闻翻炒，无新增行政决定或新事实"
+        }
+      ],
+      "publication_critical_claim_ids": ["c8"]
+    },
+    {
+      "event_id": "world_unconfirmed_mega_merger_rumor",
+      "desk": "国际",
+      "title": "市场传闻英伟达即将斥巨资收购 Hugging Face",
+      "summary": "数家科技博客援引未具名内部消息人士透露收购意向，但当事双方发言人均未予证实。",
+      "event_time": "2026-08-28T19:00:00",
+      "source_level": "B",
+      "news_importance": 89,
+      "verified_claims": [
+        {
+          "claim_id": "c9",
+          "claim_type": "unverified_rumor",
+          "source_role": "anonymous_leak",
+          "independent_verified": false,
+          "confidence": 45,
+          "content": "传闻尚无官方签署文件或SEC公告佐证"
+        }
+      ],
+      "publication_critical_claim_ids": ["c9"]
+    }
+  ]
+}
